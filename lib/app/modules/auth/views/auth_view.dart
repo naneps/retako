@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/buttons/x_button.dart';
 import 'package:getx_pattern_starter/app/common/input/x_field.dart';
-import 'package:getx_pattern_starter/app/routes/app_pages.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
@@ -13,14 +12,13 @@ class AuthView extends GetView<AuthController> {
   const AuthView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
     return Scaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 19),
+          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 20),
           child: SingleChildScrollView(
             child: Form(
-              key: formKey,
+              key: controller.formKey,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -31,11 +29,11 @@ class AuthView extends GetView<AuthController> {
                     ),
                     width: Get.width,
                     child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.center,
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
                         Image.asset(
-                          "assets/images/analytic.png",
+                          "assets/images/logo.png",
                           fit: BoxFit.contain,
                         ),
                         Text.rich(
@@ -48,7 +46,7 @@ class AuthView extends GetView<AuthController> {
                             ),
                             children: [
                               TextSpan(
-                                text: "GetX",
+                                text: "Oni",
                                 style: GoogleFonts.poppins(
                                   color: ThemeApp.primaryColor,
                                   fontSize: 22,
@@ -56,7 +54,7 @@ class AuthView extends GetView<AuthController> {
                                 ),
                               ),
                               TextSpan(
-                                text: " Starter",
+                                text: "Gami",
                                 style: GoogleFonts.poppins(
                                   color: ThemeApp.darkColor,
                                   fontSize: 22,
@@ -69,27 +67,24 @@ class AuthView extends GetView<AuthController> {
                       ],
                     ),
                   ),
-                  Text(
-                    "Login to your account",
-                    style: TextStyle(
-                      color: ThemeApp.darkColor,
-                      fontSize: 16,
-                      fontWeight: FontWeight.w600,
-                    ),
-                  ),
-                  const SizedBox(
-                    height: 10,
-                  ),
                   XTextField(
-                    labelText: "Phone",
-                    hintText: "+6281xxxx",
-                    prefixIcon: MdiIcons.phoneOutline,
+                    // labelText: "Email",
+                    hintText: "example@gmail.com",
+                    labelTextSuffix: "Email",
+                    prefixIcon: MdiIcons.emailOutline,
                     onSave: (val) {
                       // controller.phone.value = val!;
+                      controller.email.value = val!;
                     },
                     validator: (value) {
-                      if (value!.isEmpty) {
-                        return "Phone can't be empty";
+                      // make validator email must be valid
+                      bool validEmail =
+                          RegExp(r"^[a-zA-Z0-9.]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                              .hasMatch(value!);
+                      if (value.isEmpty) {
+                        return "Email can't be empty";
+                      } else if (!validEmail) {
+                        return "Email must be valid";
                       }
                       return null;
                     },
@@ -100,8 +95,9 @@ class AuthView extends GetView<AuthController> {
                   Obx(
                     () {
                       return XTextField(
-                        labelText: "password",
+                        // labelText: "password",
                         hintText: "pass****123",
+                        labelTextSuffix: "Password",
                         prefixIcon: MdiIcons.lockOutline,
                         onSave: (val) {
                           controller.password.value = val!;
@@ -140,17 +136,21 @@ class AuthView extends GetView<AuthController> {
                       ),
                     ),
                   ),
-                  XButton(
-                    text: "Login",
-                    hasIcon: true,
-                    icon: MdiIcons.login,
-                    onPressed: () {
-                      if (formKey.currentState!.validate()) {
-                        formKey.currentState!.save();
-                        // controller.login();
-                      }
-                    },
-                  ),
+                  Obx(() {
+                    return XButton(
+                      text: "Login",
+                      hasIcon: true,
+                      icon: MdiIcons.login,
+                      isDisabled: controller.isLoggingIn.value,
+                      onPressed: () {
+                        if (controller.formKey.currentState!.validate()) {
+                          controller.formKey.currentState!.save();
+                          // controller.loginWithGoogle();
+                          controller.loginWithEmailAndPassword();
+                        }
+                      },
+                    );
+                  }),
                   const SizedBox(
                     height: 10,
                   ),
@@ -184,18 +184,38 @@ class AuthView extends GetView<AuthController> {
                       ),
                     ],
                   ),
+                  //  Anda belum punya akun daftar
                   const SizedBox(
                     height: 10,
                   ),
-                  // register
-                  XButton(
-                    text: "Register",
-                    hasIcon: true,
-                    icon: MdiIcons.accountPlusOutline,
-                    onPressed: () {
-                      // controller.register();
-                      Get.toNamed(Routes.REGISTER);
-                    },
+                  Center(
+                    child: Text.rich(
+                      TextSpan(
+                        text: "Anda belum punya akun? Silahkan ",
+                        style: TextStyle(
+                          color: ThemeApp.darkColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                        children: [
+                          WidgetSpan(
+                            child: InkWell(
+                              onTap: () {
+                                Get.toNamed("/register");
+                              },
+                              child: Text(
+                                "Daftar",
+                                style: TextStyle(
+                                  color: ThemeApp.primaryColor,
+                                  fontSize: 14,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
+                      ),
+                    ),
                   ),
                 ],
               ),

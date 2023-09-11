@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "884830554822",
+    "project_id": "retako-50afd",
+    "storage_bucket": "retako-50afd.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:884830554822:android:4d1631387ea5e71e5de5c7",
+        "android_client_info": {
+          "package_name": "com.retako.startsheep"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "884830554822-cv6li1adgs8jk6nrobvi1sr48g2p7mgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAbYoki8YVjfusp7fWLybTk8tRsytG5Lk8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "884830554822-cv6li1adgs8jk6nrobvi1sr48g2p7mgl.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "884830554822-ttebhtijn09pl69ql25rsm6p3ltkl3mc.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.example.getxPatternStarter"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

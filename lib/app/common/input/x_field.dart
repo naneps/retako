@@ -8,6 +8,7 @@ class XTextField extends StatelessWidget {
   final String? initialValue;
   final IconData? prefixIcon;
   final IconData? suffixIcon;
+  final String? labelTextSuffix;
   final int? maxLines;
   final int? minLines;
   final bool? obscureText;
@@ -27,6 +28,7 @@ class XTextField extends StatelessWidget {
   const XTextField(
       {super.key,
       this.controller,
+      this.labelTextSuffix,
       this.hintText,
       this.obscureText,
       this.icon,
@@ -42,46 +44,65 @@ class XTextField extends StatelessWidget {
       this.suffixIcon,
       this.onPressSuffix,
       this.initialValue,
-      this.filled = false,
-      this.fillColor = Colors.white,
+      this.filled = true,
+      this.fillColor,
       this.disabled,
       this.onSave});
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      minLines: minLines ?? 1,
-      maxLines: maxLines ?? 1,
-      validator: validator,
-      onChanged: onChanged,
-      style: TextStyle(
-        color: ThemeApp.darkColor,
-      ),
-      initialValue: initialValue,
-      enableSuggestions: true,
-      onSaved: onSave,
-      controller: controller,
-      cursorColor: ThemeApp.neutralColor,
-      enabled: disabled == true ? false : true,
-      obscureText: obscureText ?? false,
-      decoration: InputDecoration(
-        fillColor: fillColor,
-        filled: true,
-        suffixIcon: IconButton(
-          onPressed: onPressSuffix,
-          icon: Icon(
-            suffixIcon,
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Visibility(
+          visible: labelTextSuffix != null ? true : false,
+          child: Text(
+            labelTextSuffix ?? "",
+            style: TextStyle(
+              color: ThemeApp.darkColor,
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+            ),
           ),
         ),
-        prefixIcon: prefixIcon != null
-            ? Icon(
-                prefixIcon,
-              )
-            : null,
-        hintText: hintText,
-        labelText: labelText,
-      ),
-      keyboardType: keyboardType,
+        const SizedBox(
+          height: 10,
+        ),
+        TextFormField(
+          minLines: minLines ?? 1,
+          maxLines: maxLines ?? 1,
+          validator: validator,
+          onChanged: onChanged,
+          style: TextStyle(
+            color: ThemeApp.darkColor,
+          ),
+          initialValue: initialValue,
+          enableSuggestions: true,
+          onSaved: onSave,
+          controller: controller,
+          cursorColor: ThemeApp.neutralColor,
+          enabled: disabled == true ? false : true,
+          obscureText: obscureText ?? false,
+          decoration: InputDecoration(
+            fillColor: fillColor,
+            filled: true,
+            suffixIcon: IconButton(
+              onPressed: onPressSuffix,
+              icon: Icon(
+                suffixIcon,
+              ),
+            ),
+            prefixIcon: prefixIcon != null
+                ? Icon(
+                    prefixIcon,
+                  )
+                : null,
+            hintText: hintText,
+            labelText: labelText,
+          ),
+          keyboardType: keyboardType,
+        ),
+      ],
     );
   }
 }

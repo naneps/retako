@@ -24,7 +24,7 @@ class XButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        backgroundColor: isDisabled! ? disabledColor : ThemeApp.primaryColor,
+        backgroundColor: isDisabled! ? disabledColor : null,
         padding: const EdgeInsets.symmetric(vertical: 15, horizontal: 10),
       ),
       onPressed: isDisabled! ? null : onPressed,
@@ -37,19 +37,18 @@ class XButton extends StatelessWidget {
               visible: hasIcon!,
               child: Icon(
                 icon,
-                color: Colors.white,
                 size: 20,
               ),
             ),
             Visibility(
               visible: hasIcon!,
-              child: SizedBox(width: 5),
+              child: const SizedBox(width: 5),
             ),
             Text(
               text ?? "Button",
               textAlign: TextAlign.center,
               style: TextStyle(
-                color: isDisabled! ? ThemeApp.grayTextColor : Colors.white,
+                color: isDisabled! ? ThemeApp.grayTextColor : null,
                 fontSize: 16,
                 fontWeight: FontWeight.bold,
               ),

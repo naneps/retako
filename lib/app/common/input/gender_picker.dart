@@ -21,12 +21,12 @@ class GenderPicker extends GetView<GenderPickerController> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Text(
+        Text(
           "Jenis Kelamin",
           style: TextStyle(
-            fontSize: 14,
+            fontSize: 16,
             fontWeight: FontWeight.w500,
-            color: Colors.grey,
+            color: ThemeApp.darkColor,
           ),
         ),
         Obx(() {
@@ -57,13 +57,13 @@ class GenderPicker extends GetView<GenderPickerController> {
             vertical: 10,
           ),
           hasBorder: true,
-          color: isSelected ? ThemeApp.primaryColor : Colors.white,
+          color: isSelected ? ThemeApp.secondaryColor : ThemeApp.lightColor,
           child: Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Icon(
                 genderModel.icon,
-                color: isSelected ? Colors.white : ThemeApp.neutralColor,
+                color: isSelected ? ThemeApp.lightColor : ThemeApp.neutralColor,
               ),
               const SizedBox(width: 10),
               Text(
@@ -71,7 +71,8 @@ class GenderPicker extends GetView<GenderPickerController> {
                 style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
-                  color: isSelected ? Colors.white : ThemeApp.neutralColor,
+                  color:
+                      isSelected ? ThemeApp.lightColor : ThemeApp.neutralColor,
                 ),
               ),
             ],
