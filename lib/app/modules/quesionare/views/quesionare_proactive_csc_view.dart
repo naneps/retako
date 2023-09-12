@@ -12,6 +12,23 @@ class QuestionaryProactiveCSCView
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      persistentFooterButtons: [
+        RoundedContainer(
+          margin: const EdgeInsets.all(10.0),
+          width: Get.width,
+          height: 50,
+          radiusType: RadiusType.circle,
+          color: Colors.transparent,
+          hasShadow: true,
+          child: ElevatedButton(
+            onPressed: () {
+              // controller.submit();
+              controller.submit();
+            },
+            child: const Text("Submit"),
+          ),
+        ),
+      ],
       body: SafeArea(
         child: Column(
           children: [
@@ -53,7 +70,14 @@ class QuestionaryProactiveCSCView
                       ),
                       itemBuilder: (context, index) {
                         final data = snapshot.data![index];
-                        return CategoryProactiveCard(data: data);
+                        return CategoryProactiveCard(
+                          data: data,
+                          onAnswered: (val) {},
+                          onAnsweredAll: (questionnaireProactiveModel) {
+                            controller.questions[index] =
+                                questionnaireProactiveModel; // Update selectedAnswer here
+                          },
+                        );
                       },
                     );
                   }

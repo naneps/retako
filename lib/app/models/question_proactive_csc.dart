@@ -1,13 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:get/get.dart';
 
 class QuestionnaireProactiveModel {
   final String category;
-  final List<QuestionModel> questions;
-  RxBool isAnsweredAll = false.obs;
-
+  List<QuestionModel> questions;
+  RxBool? isAnsweredAll = false.obs;
+  final String id;
   QuestionnaireProactiveModel({
     required this.category,
     required this.questions,
+    required this.id,
+    this.isAnsweredAll,
   });
 
   factory QuestionnaireProactiveModel.fromJson(Map<String, dynamic> json) {
@@ -16,18 +19,29 @@ class QuestionnaireProactiveModel {
     final questions = questionsList
         .map((question) => QuestionModel.fromJson(question))
         .toList();
-
+    final id = json['id'] as String;
     return QuestionnaireProactiveModel(
       category: category,
       questions: questions,
+      id: id,
     );
   }
-  //
+
+  // from firestore
+  QuestionnaireProactiveModel.fromFirestore(DocumentSnapshot doc)
+      : id = doc.id,
+        category = doc['category'],
+        questions = List<QuestionModel>.from(
+          doc['questions'].map(
+            (question) => QuestionModel.fromJson(question),
+          ),
+        );
   toJson() {
     return {
       "category": category,
       "questions": questions.map((e) => e.toJson()).toList(),
-      "isAnsweredAll": isAnsweredAll,
+      "isAnsweredAll":
+          isAnsweredAll!.value, // Use .value to get the boolean value
       "answeredAt": DateTime.now().millisecondsSinceEpoch,
     };
   }
@@ -36,14 +50,16 @@ class QuestionnaireProactiveModel {
 class QuestionModel {
   final String statement;
   final Map<String, String> answers;
-  final String? selectedAnswer;
-  RxBool? isAnswered = false.obs;
+  String? selectedAnswer;
+  int? selectedWeight;
+  RxBool isAnswered = false.obs;
 
   QuestionModel({
     required this.statement,
     required this.answers,
     this.selectedAnswer,
-    this.isAnswered,
+    this.selectedWeight,
+    required this.isAnswered,
   });
 
   factory QuestionModel.fromJson(Map<String, dynamic> json) {
@@ -55,6 +71,7 @@ class QuestionModel {
     return QuestionModel(
       statement: statement,
       answers: answers,
+      isAnswered: false.obs,
     );
   }
   // to json
@@ -63,7 +80,9 @@ class QuestionModel {
       "statement": statement,
       "answers": answers,
       "selectedAnswer": selectedAnswer,
-      "isAnswered": isAnswered,
+      "isAnswered": isAnswered.value,
+      "selectedWeight": selectedWeight,
+      "answeredAt": DateTime.now().millisecondsSinceEpoch,
     };
   }
 }

@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/utils.dart';
 import 'package:getx_pattern_starter/app/models/question_s_e_model.dart';
 import 'package:getx_pattern_starter/app/models/respondent_model.dart';
+import 'package:getx_pattern_starter/app/modules/quesionare/views/result_effeciency_view.dart';
 import 'package:getx_pattern_starter/app/services/quesionare_stream_service.dart';
 import 'package:sp_util/sp_util.dart';
 
@@ -57,23 +58,23 @@ class QuestionnaireSelfEfficiencyController extends GetxController {
   // Analyze self-efficacy for smoking cessation
   String analyzeSelfEfficacySmoking(int selfEfficacyScore) {
     if (selfEfficacyScore < 20) {
-      return "Low";
+      return "Rendah";
     } else if (selfEfficacyScore >= 20 && selfEfficacyScore <= 30) {
-      return "Moderate";
+      return "Sedang";
     } else {
-      return "High";
+      return "Tinggi";
     }
   }
 
   Future<void> saveToFirestore() async {
     final firestore = FirebaseFirestore.instance;
     final respondent = RespondentModel()
-      ..selfEfficacyScore = selfEfficacyScore.value
-      ..questionSelfEfficiencyAnswered = questions
       ..age = SpUtil.getString("age")
       ..gender = SpUtil.getString("gender")
       ..smoking = SpUtil.getString("smoking")
-      ..smokingSince = SpUtil.getString("smokingSince");
+      ..smokingSince = SpUtil.getString("smokingSince")
+      ..selfEfficacyScore = selfEfficacyScore.value
+      ..questionSelfEfficiencyAnswered = questions;
 
     print("Respondent data: ${respondent.toJson()}");
 
@@ -94,10 +95,25 @@ class QuestionnaireSelfEfficiencyController extends GetxController {
         await firestore
             .collection("respondents")
             .doc(respondentId)
-            .update(respondent.toJson());
-        print("Respondent data updated successfully.");
-        // return true; // Successfully updated data.
+            .collection('questionnaires')
+            .doc("selfEfficacy")
+            .set({
+          "selfEfficacyScore": selfEfficacyScore.value,
+          "questionSelfEfficiencyAnswered":
+              questions.map((e) => e.toJson()).toList(),
+        });
       }
+
+      Get.to(
+        () => const ResultEfficiencyView(),
+        fullscreenDialog: true,
+        arguments: {
+          "selfEfficacyScore": selfEfficacyScore.value,
+          "selfEfficacyAnalysis":
+              analyzeSelfEfficacySmoking(selfEfficacyScore.value),
+          "respondent": respondent,
+        },
+      );
     } catch (e) {
       print("Error: $e");
       // return false; // Handle the error or take appropriate action here.

@@ -2,14 +2,22 @@ import 'package:flutter/material.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/models/question_proactive_csc.dart';
 
-class StatementCard extends StatelessWidget {
+class StatementCard extends StatefulWidget {
   StatementCard({
     super.key,
     this.index,
     required this.question,
+    required this.onAnswered,
   });
   int? index;
   final QuestionModel question;
+  final Function(dynamic) onAnswered;
+
+  @override
+  State<StatementCard> createState() => _StatementCardState();
+}
+
+class _StatementCardState extends State<StatementCard> {
   @override
   Widget build(BuildContext context) {
     return RoundedContainer(
@@ -23,7 +31,7 @@ class StatementCard extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 10),
             child: Text(
-              "Pernyataan ${index! + 1}",
+              "Pernyataan ${widget.index! + 1}",
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,
@@ -40,7 +48,7 @@ class StatementCard extends StatelessWidget {
               vertical: 5,
             ),
             child: Text(
-              question.statement,
+              widget.question.statement,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.w500,
@@ -49,19 +57,27 @@ class StatementCard extends StatelessWidget {
           ),
           Column(
             children: List.generate(
-              question.answers.length,
+              widget.question.answers.length,
               (optionIndex) {
                 return Row(
                   children: [
                     Radio<dynamic>(
-                      value: question.answers.keys.toList()[optionIndex],
-                      groupValue: question.selectedAnswer,
+                      value: widget.question.answers.keys.toList()[optionIndex],
+                      groupValue: widget.question.selectedAnswer,
                       onChanged: (value) {
-                        // setState(() {});
+                        setState(() {
+                          widget.question.selectedAnswer =
+                              value; // Update selectedAnswer here
+                          widget.question.isAnswered.value = true;
+                          widget.question.selectedWeight = int.parse(
+                            widget.question.answers.keys.toList()[optionIndex],
+                          );
+                          widget.onAnswered(widget.question);
+                        });
                       },
                     ),
                     Text(
-                      question.answers.values.toList()[optionIndex],
+                      widget.question.answers.values.toList()[optionIndex],
                       style: const TextStyle(
                         fontSize: 14,
                         fontWeight: FontWeight.w500,
