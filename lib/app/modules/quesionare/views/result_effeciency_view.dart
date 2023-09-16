@@ -74,6 +74,11 @@ class ResultEfficiencyView extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
+                          Icon(
+                            getScoreIcon(score),
+                            size: 100,
+                            color: ThemeApp.accentTextColor,
+                          ),
                         ],
                       ),
                     ),
@@ -93,5 +98,17 @@ class ResultEfficiencyView extends StatelessWidget {
         ),
       ),
     );
+  }
+
+  IconData getScoreIcon(int score) {
+    if (score >= 36 && score <= 71) {
+      return Icons.sentiment_dissatisfied;
+    } else if (score >= 72 && score <= 107) {
+      return Icons.sentiment_neutral;
+    } else if (score >= 108 && score <= 144) {
+      return Icons.sentiment_satisfied;
+    } else {
+      return Icons.sentiment_very_dissatisfied;
+    }
   }
 }

@@ -1,13 +1,18 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
+import 'package:getx_pattern_starter/app/common/utils.dart';
 import 'package:getx_pattern_starter/app/common/x_video_player.dart';
+import 'package:getx_pattern_starter/app/models/content_model.dart';
+import 'package:getx_pattern_starter/app/themes/theme.dart';
 
-class VideoView extends GetView {
+class VideoView extends GetView<VideoEducationController> {
   const VideoView({super.key});
 
   @override
   Widget build(BuildContext context) {
+    Get.put(VideoEducationController());
     return RoundedContainer(
       borderColor: Theme.of(context).primaryColor,
       padding: const EdgeInsets.all(10.0),
@@ -27,41 +32,73 @@ class VideoView extends GetView {
             ),
           ),
           const SizedBox(height: 10),
-          RoundedContainer(
-            width: Get.width,
-            height: 200,
-            child: const ReusableVideoPlayer(
-                videoUrl:
-                    "https://flutter.github.io/assets-for-api-docs/assets/videos/bee.mp4"),
-          ),
           Expanded(
-            child: ListView.builder(
-              itemExtent: 200,
-              itemBuilder: (context, index) {
-                return RoundedContainer(
-                  margin: const EdgeInsets.symmetric(vertical: 10),
-                  padding: const EdgeInsets.all(10.0),
-                  gradient: LinearGradient(
-                    colors: [
-                      Colors.white,
-                      Colors.white,
-                      Theme.of(context).primaryColor.withOpacity(0.5),
-                      Theme.of(context).primaryColor.withOpacity(0.5),
-                      Colors.white,
-                      Colors.white,
-                    ],
-                    begin: Alignment.topLeft,
-                    end: Alignment.bottomRight,
-                  ),
-                  hasBorder: true,
-                  borderColor: Theme.of(context).primaryColor,
-                  child: const Text("Video"),
+            child: StreamBuilder(
+              stream: controller.getVideos(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: Utils.loadingWidget(),
+                      );
+                    } else if (snapshot.hasData) {
+                      return RoundedContainer(
+                        height: 200,
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(10.0),
+                        gradient: LinearGradient(
+                          colors: [
+                            ThemeApp.backgroundColor,
+                            ThemeApp.backgroundColor,
+                            ThemeApp.primaryColor.withOpacity(0.5),
+                            ThemeApp.primaryColor.withOpacity(0.5),
+                            ThemeApp.backgroundColor,
+                            ThemeApp.backgroundColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        hasBorder: true,
+                        borderColor: ThemeApp.primaryColor,
+                        child: ReusableVideoPlayer(
+                          videoUrl: snapshot.data![index].url!,
+                        ),
+                      );
+                    }
+                    return null;
+                  },
                 );
               },
             ),
-          ),
+          )
         ],
       ),
     );
+  }
+}
+
+class VideoEducationController extends GetxController {
+  final fireStore = FirebaseFirestore.instance;
+
+  Stream<List<ContentModel>> getVideos() {
+    return fireStore.collection("videos").snapshots().map((event) {
+      return event.docs.map((e) {
+        return ContentModel.fromJson(e.data());
+      }).toList();
+    });
+  }
+
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  @override
+  void onClose() {
+    // TODO: implement onClose
+    super.onClose();
   }
 }

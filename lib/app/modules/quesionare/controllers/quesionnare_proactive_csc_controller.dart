@@ -74,52 +74,54 @@ class QuestionaryProactiveCSCController extends GetxController {
 
   Future<void> saveToFirestore() async {
     final firestore = FirebaseFirestore.instance;
-    final respondent = RespondentModel()
-      ..proactiveCSCScore = proactiveCSCScore.value
-      ..questionProactiveCSCAnswered = questions
-      ..age = SpUtil.getString("age")
-      ..gender = SpUtil.getString("gender")
-      ..smoking = SpUtil.getString("smoking")
-      ..smokingSince = SpUtil.getString("smokingSince");
+    final respondentId = SpUtil.getString("respondentId");
+
+    final respondent = RespondentModel(
+      age: SpUtil.getString("age"),
+      gender: SpUtil.getString("gender"),
+      smoking: SpUtil.getString("smoking"),
+      smokingSince: SpUtil.getString("smokingSince"),
+    );
 
     print("Respondent data: ${respondent.toJson()}");
+    print("Respondent id: $respondentId");
 
-    final respondentId = SpUtil.getString("respondentId");
+    final questionnaireData = {
+      "score": proactiveCSCScore.value,
+      "answeredAt": DateTime.now().toIso8601String(),
+      "questions": questions.map((e) => e.toJson()).toList(),
+    };
+
     try {
-      if (respondentId!.isEmpty) {
-        final response =
-            await firestore.collection("respondents").add(respondent.toJson());
-        // ignore: unnecessary_null_comparison
-        if (response != null) {
-          SpUtil.putString("respondentId", response.id);
-          // return true; // Successfully added new data.
-        } else {
-          print("Error: Failed to add respondent data to Firestore.");
-          // return false; // Failed to add data.
-        }
-      } else {
+      if (respondentId != "" && respondentId!.isNotEmpty) {
+        print("Respondent id Exist: $respondentId");
         await firestore
-            .collection("respondents")
+            .collection('respondents')
             .doc(respondentId)
-            .collection("questionnaires")
-            .doc("proactive-csc")
-            .set({
-          "proactiveCSCScore": proactiveCSCScore.value,
-          "questionProactiveCSCAnswered":
-              questions.map((e) => e.toJson()).toList(),
-        });
+            .collection('questionnaire')
+            .doc('proactiveCSC')
+            .set(questionnaireData);
+      } else {
+        final response =
+            await firestore.collection('respondents').add(respondent.toJson());
+        SpUtil.putString("respondentId", response.id);
+        await firestore
+            .collection('respondents')
+            .doc(response.id) // Use the newly generated ID
+            .collection('questionnaire')
+            .doc('proactiveCSC')
+            .set(questionnaireData);
       }
+
       Get.to(
         () => const ResultProactiveCSC(),
         transition: Transition.rightToLeft,
         fullscreenDialog: true,
-        arguments: {
-          "score": proactiveCSCScore.value,
-        },
+        arguments: {"score": proactiveCSCScore.value},
       );
     } catch (e) {
       print("Error: $e");
-      // return false; // Handle the error or take appropriate action here.
+      // Handle the error or take appropriate action here.
     }
   }
 }

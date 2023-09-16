@@ -61,17 +61,18 @@ class _StatementCardState extends State<StatementCard> {
               (optionIndex) {
                 return Row(
                   children: [
-                    Radio<dynamic>(
-                      value: widget.question.answers.keys.toList()[optionIndex],
-                      groupValue: widget.question.selectedAnswer,
+                    Radio<int>(
+                      value: int.parse(
+                          widget.question.answers.keys.toList()[optionIndex]),
+                      groupValue: widget.question.selectedWeight,
                       onChanged: (value) {
                         setState(() {
-                          widget.question.selectedAnswer =
-                              value; // Update selectedAnswer here
+                          widget.question.selectedAnswer = widget
+                              .question.answers.values
+                              .toList()[optionIndex];
+
                           widget.question.isAnswered.value = true;
-                          widget.question.selectedWeight = int.parse(
-                            widget.question.answers.keys.toList()[optionIndex],
-                          );
+                          widget.question.selectedWeight = value!;
                           widget.onAnswered(widget.question);
                         });
                       },

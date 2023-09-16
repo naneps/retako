@@ -11,6 +11,7 @@ class ResultProactiveCSC extends StatelessWidget {
   Widget build(BuildContext context) {
     final Map<String, dynamic> args = Get.arguments;
     final int score = args["score"];
+    print(score);
 
     return Scaffold(
       body: SafeArea(
@@ -65,6 +66,7 @@ class ResultProactiveCSC extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
+
                           Text(
                             getScoreCondition(score),
                             style: const TextStyle(
@@ -73,13 +75,19 @@ class ResultProactiveCSC extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-                          Text(
-                            getScoreDescription(score),
-                            style: const TextStyle(
-                              fontSize: 14,
-                              fontWeight: FontWeight.bold,
-                            ),
+                          Icon(
+                            getScoreIcon(score),
+                            size: 100,
+                            color: ThemeApp.accentTextColor,
                           ),
+                          // const SizedBox(height: 10),
+                          // Text(
+                          //   getScoreDescription(score),
+                          //   style: const TextStyle(
+                          //     fontSize: 14,
+                          //     fontWeight: FontWeight.bold,
+                          //   ),
+                          // ),
                           const SizedBox(height: 10),
                         ],
                       ),
@@ -103,19 +111,31 @@ class ResultProactiveCSC extends StatelessWidget {
   }
 
   String getScoreCondition(int score) {
-    if (score < 50) {
+    if (score >= 36 && score <= 71) {
       return "Rendah";
-    } else if (score >= 50 && score < 75) {
-      return "Sedang";
-    } else {
+    } else if (score >= 72 && score <= 107) {
+      return "Cukup";
+    } else if (score >= 108 && score <= 144) {
       return "Tinggi";
+    } else {
+      return "";
+    }
+  }
+
+  IconData getScoreIcon(int score) {
+    if (score >= 36 && score <= 71) {
+      return Icons.sentiment_dissatisfied;
+    } else if (score >= 72 && score <= 107) {
+      return Icons.sentiment_neutral;
+    } else {
+      return Icons.sentiment_satisfied;
     }
   }
 
   String getScoreDescription(int score) {
-    if (score < 50) {
+    if (score >= 36 && score <= 71) {
       return "Skor Anda dalam kategori rendah, yang berarti Anda mungkin perlu lebih banyak dukungan dan perencanaan sebelum mencoba berhenti merokok.";
-    } else if (score >= 50 && score < 75) {
+    } else if (score >= 72 && score <= 107) {
       return "Skor Anda dalam kategori sedang, yang menunjukkan bahwa Anda memiliki pemahaman tentang apa yang dibutuhkan untuk berhenti merokok, tetapi masih perlu melakukan lebih banyak usaha dalam beberapa aspek.";
     } else {
       return "Skor Anda dalam kategori tinggi, yang mengindikasikan bahwa Anda memiliki tingkat kesiapan yang tinggi untuk berhenti merokok dan mungkin sudah memiliki beberapa rencana yang baik.";

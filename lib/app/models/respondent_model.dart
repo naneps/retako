@@ -29,7 +29,7 @@ class RespondentModel {
       "gender": gender,
       "smoking": smoking,
       "smokingSince": smokingSince,
-      "createdAt": DateTime.now().millisecondsSinceEpoch,
+      "createdAt": DateTime.now().toIso8601String()
     };
   }
 

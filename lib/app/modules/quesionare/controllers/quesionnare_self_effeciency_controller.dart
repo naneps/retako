@@ -43,7 +43,7 @@ class QuestionnaireSelfEfficiencyController extends GetxController {
   void save() {
     if (questionAnswered.value == totalQuestions.value) {
       calculateScore();
-      String result = analyzeSelfEfficacySmoking(selfEfficacyScore.value);
+      String result = analyzeSelfEfficacySmoking(selfEfficacyScore.value)!;
       print("Self-efficacy score: ${selfEfficacyScore.value}");
       print("Self-efficacy analysis: $result");
       saveToFirestore();
@@ -56,67 +56,59 @@ class QuestionnaireSelfEfficiencyController extends GetxController {
   }
 
   // Analyze self-efficacy for smoking cessation
-  String analyzeSelfEfficacySmoking(int selfEfficacyScore) {
-    if (selfEfficacyScore < 20) {
+  String? analyzeSelfEfficacySmoking(int selfEfficacyScore) {
+    if (selfEfficacyScore <= 12 && selfEfficacyScore <= 27) {
       return "Rendah";
-    } else if (selfEfficacyScore >= 20 && selfEfficacyScore <= 30) {
-      return "Sedang";
-    } else {
+    } else if (selfEfficacyScore >= 28 && selfEfficacyScore <= 43) {
+      return "Cukup";
+    } else if (selfEfficacyScore >= 44 && selfEfficacyScore <= 60) {
       return "Tinggi";
     }
+    return null;
   }
 
   Future<void> saveToFirestore() async {
     final firestore = FirebaseFirestore.instance;
-    final respondent = RespondentModel()
-      ..age = SpUtil.getString("age")
-      ..gender = SpUtil.getString("gender")
-      ..smoking = SpUtil.getString("smoking")
-      ..smokingSince = SpUtil.getString("smokingSince")
-      ..selfEfficacyScore = selfEfficacyScore.value
-      ..questionSelfEfficiencyAnswered = questions;
-
-    print("Respondent data: ${respondent.toJson()}");
-
     final respondentId = SpUtil.getString("respondentId");
-    try {
-      if (respondentId!.isEmpty) {
-        final response =
-            await firestore.collection("respondents").add(respondent.toJson());
-        // ignore: unnecessary_null_comparison
-        if (response != null) {
-          SpUtil.putString("respondentId", response.id);
-          // return true; // Successfully added new data.
-        } else {
-          print("Error: Failed to add respondent data to Firestore.");
-          // return false; // Failed to add data.
-        }
-      } else {
-        await firestore
-            .collection("respondents")
-            .doc(respondentId)
-            .collection('questionnaires')
-            .doc("selfEfficacy")
-            .set({
-          "selfEfficacyScore": selfEfficacyScore.value,
-          "questionSelfEfficiencyAnswered":
-              questions.map((e) => e.toJson()).toList(),
-        });
-      }
-
-      Get.to(
-        () => const ResultEfficiencyView(),
-        fullscreenDialog: true,
-        arguments: {
-          "selfEfficacyScore": selfEfficacyScore.value,
-          "selfEfficacyAnalysis":
-              analyzeSelfEfficacySmoking(selfEfficacyScore.value),
-          "respondent": respondent,
-        },
-      );
-    } catch (e) {
-      print("Error: $e");
-      // return false; // Handle the error or take appropriate action here.
+    final respondent = RespondentModel(
+      age: SpUtil.getString("age"),
+      gender: SpUtil.getString("gender"),
+      smoking: SpUtil.getString("smoking"),
+      smokingSince: SpUtil.getString("smokingSince"),
+    );
+    final questionnaireData = {
+      "score": selfEfficacyScore.value,
+      "answeredAt": DateTime.now().toIso8601String(),
+      "questions": questions.map((e) => e.toJson()).toList(),
+    };
+    if (respondentId != "" && respondentId!.isNotEmpty) {
+      await firestore
+          .collection("respondents")
+          .doc(respondentId)
+          .collection("questionnaire")
+          .doc("selfEfficacy")
+          .set(questionnaireData);
+    } else {
+      final docRef =
+          await firestore.collection("respondents").add(respondent.toJson());
+      await firestore
+          .collection("respondents")
+          .doc(docRef.id)
+          .collection("questionnaire")
+          .doc("selfEfficacy")
+          .set(questionnaireData);
+      SpUtil.putString("respondentId", docRef.id);
     }
+
+    Get.to(
+      () => const ResultEfficiencyView(),
+      fullscreenDialog: true,
+      arguments: {
+        "selfEfficacyScore": selfEfficacyScore.value,
+        "selfEfficacyAnalysis":
+            analyzeSelfEfficacySmoking(selfEfficacyScore.value),
+        "respondent": respondent,
+      },
+    );
   }
 }

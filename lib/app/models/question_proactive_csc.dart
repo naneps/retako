@@ -42,7 +42,7 @@ class QuestionnaireProactiveModel {
       "questions": questions.map((e) => e.toJson()).toList(),
       "isAnsweredAll":
           isAnsweredAll!.value, // Use .value to get the boolean value
-      "answeredAt": DateTime.now().millisecondsSinceEpoch,
+      "answeredAt": DateTime.now().toIso8601String(),
     };
   }
 }

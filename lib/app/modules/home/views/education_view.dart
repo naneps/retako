@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/common/utils.dart';
+import 'package:getx_pattern_starter/app/modules/home/views/modul_view.dart';
 import 'package:getx_pattern_starter/app/modules/home/views/poster_view.dart';
 import 'package:getx_pattern_starter/app/modules/home/views/video_view.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
@@ -93,7 +94,7 @@ class _EducationViewState extends State<EducationView> {
   Widget currentWidget() {
     switch (currentIndex) {
       case 0:
-        return const Text("Modul");
+        return const ModuleView();
       case 1:
         return const EducationPosterView();
       case 2:
