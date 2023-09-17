@@ -6,9 +6,9 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
+import 'package:getx_pattern_starter/app/modules/home/widgets/pdf_view.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 
 import '../../../models/content_model.dart';
 
@@ -56,23 +56,39 @@ class ModuleView extends GetView<ModuleController> {
                   // Extract the list of PDF URLs from the snapshot data
                   final pdfUrls = snapshot.data;
 
-                  return RoundedContainer(
-                    child: SfPdfViewer.network(
-                      pdfUrls![0].url!,
-                      onDocumentLoadFailed:
-                          (PdfDocumentLoadFailedDetails details) {
-                        // ignore: avoid_print
-                        print(details.error);
-                      },
-                      onDocumentLoaded: (PdfDocumentLoadedDetails details) {
-                        // ignore: avoid_print
-                        print(details.document);
-                        //
-                      },
-                      enableDoubleTapZooming: true,
-                      enableTextSelection: true,
-                      enableDocumentLinkAnnotation: true,
-                    ),
+                  return ListView.builder(
+                    itemCount: pdfUrls!.length,
+                    itemBuilder: (context, index) {
+                      return RoundedContainer(
+                        child: ListTile(
+                          leading: Icon(
+                            Icons.picture_as_pdf,
+                            color: ThemeApp.backgroundColor,
+                            size: 30,
+                          ),
+                          title: Text(
+                            pdfUrls[index].title!,
+                            style: TextStyle(
+                              color: ThemeApp.darkColor,
+                            ),
+                          ),
+                          trailing: IconButton(
+                            icon: Icon(
+                              Icons.chevron_right_outlined,
+                              color: ThemeApp.backgroundColor,
+                            ),
+                            onPressed: () async {
+                              Get.to(
+                                PDFScreen(
+                                  path: pdfUrls[index].url,
+                                  title: pdfUrls[index].title,
+                                ),
+                              );
+                            },
+                          ),
+                        ),
+                      );
+                    },
                   );
                 }
               },

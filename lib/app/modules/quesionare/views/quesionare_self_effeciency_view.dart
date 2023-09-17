@@ -1,12 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_pattern_starter/app/common/buttons/x_Icon_button.dart';
 import 'package:getx_pattern_starter/app/common/buttons/x_button.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/common/utils.dart';
 import 'package:getx_pattern_starter/app/modules/quesionare/controllers/quesionnare_self_effeciency_controller.dart';
 import 'package:getx_pattern_starter/app/modules/quesionare/widgets/question_card.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class QuestionnaireSelfEfficiencyView
     extends GetView<QuestionnaireSelfEfficiencyController> {
@@ -47,6 +49,55 @@ class QuestionnaireSelfEfficiencyView
                     color: Colors.white,
                   ),
                 ),
+                const Spacer(),
+                XIconButton(
+                  icon: MdiIcons.help,
+                  size: 25,
+                  onTap: () {
+                    // dialog keterangan skor
+                    Get.defaultDialog(
+                      title: "Keterangan Skor",
+                      content: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 0 - 27 = Rendah"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.yellow,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 28 - 43 = Cukup"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.red,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 44 -  60 = Tinggi"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(width: 10),
               ],
             ),
             const SizedBox(

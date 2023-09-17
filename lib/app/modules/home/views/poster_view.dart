@@ -33,47 +33,49 @@ class EducationPosterView extends GetView<EducationPosterController> {
           ),
           const SizedBox(height: 10),
           Expanded(
-              child: StreamBuilder(
-                  stream: controller.getPoster(),
-                  builder: (context, snapshot) {
-                    return ListView.builder(
-                      itemCount: snapshot.data!.length,
-                      itemBuilder: (context, index) {
-                        if (snapshot.connectionState ==
-                            ConnectionState.waiting) {
-                          return Center(
-                            child: Utils.loadingWidget(),
-                          );
-                        } else if (snapshot.hasData) {
-                          return RoundedContainer(
-                            margin: const EdgeInsets.symmetric(vertical: 10),
-                            padding: const EdgeInsets.all(10.0),
-                            gradient: LinearGradient(
-                              colors: [
-                                ThemeApp.backgroundColor,
-                                ThemeApp.backgroundColor,
-                                ThemeApp.primaryColor.withOpacity(0.5),
-                                ThemeApp.primaryColor.withOpacity(0.5),
-                                ThemeApp.backgroundColor,
-                                ThemeApp.backgroundColor,
-                              ],
-                              begin: Alignment.topLeft,
-                              end: Alignment.bottomRight,
-                            ),
-                            hasBorder: true,
-                            borderColor: ThemeApp.primaryColor,
-                            child: XPicture(
-                              imageUrl: snapshot.data![index].url,
-                              assetImage: "assets/images/logo.png",
-                              sizeHeight: Get.width,
-                              sizeWidth: Get.width,
-                            ),
-                          );
-                        }
-                        return null;
-                      },
-                    );
-                  }))
+            child: StreamBuilder(
+              initialData: const [],
+              stream: controller.getPoster(),
+              builder: (context, snapshot) {
+                return ListView.builder(
+                  itemCount: snapshot.data!.length,
+                  itemBuilder: (context, index) {
+                    if (snapshot.connectionState == ConnectionState.waiting) {
+                      return Center(
+                        child: Utils.loadingWidget(),
+                      );
+                    } else if (snapshot.hasData) {
+                      return RoundedContainer(
+                        margin: const EdgeInsets.symmetric(vertical: 10),
+                        padding: const EdgeInsets.all(10.0),
+                        gradient: LinearGradient(
+                          colors: [
+                            ThemeApp.backgroundColor,
+                            ThemeApp.backgroundColor,
+                            ThemeApp.primaryColor.withOpacity(0.5),
+                            ThemeApp.primaryColor.withOpacity(0.5),
+                            ThemeApp.backgroundColor,
+                            ThemeApp.backgroundColor,
+                          ],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        hasBorder: true,
+                        borderColor: ThemeApp.primaryColor,
+                        child: XPicture(
+                          imageUrl: snapshot.data![index].url,
+                          assetImage: "assets/images/logo.png",
+                          sizeHeight: Get.width,
+                          sizeWidth: Get.width,
+                        ),
+                      );
+                    }
+                    return const SizedBox();
+                  },
+                );
+              },
+            ),
+          )
         ],
       ),
     );

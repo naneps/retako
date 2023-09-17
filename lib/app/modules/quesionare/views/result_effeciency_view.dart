@@ -4,6 +4,7 @@ import 'package:getx_pattern_starter/app/common/buttons/x_button.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/modules/home/views/home_view.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ResultEfficiencyView extends StatelessWidget {
   const ResultEfficiencyView({super.key});
@@ -36,16 +37,65 @@ class ResultEfficiencyView extends StatelessWidget {
                   children: [
                     RoundedContainer(
                       color: ThemeApp.accentTextColor,
-                      hasBorder: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       radius: 0,
-                      child: const Center(
-                        child: Text(
-                          "Hasil",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          const Text(
+                            "Hasil",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          const Spacer(),
+                          //
+                          IconButton(
+                            icon: const Icon(MdiIcons.information),
+                            onPressed: () {
+                              Get.defaultDialog(
+                                title: "Keterangan Skor",
+                                content: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.green,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 0 - 27 = Rendah"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.yellow,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 28 - 43 = Cukup"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 44 -  60 = Tinggi"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        ],
                       ),
                     ),
                     RoundedContainer(
@@ -78,6 +128,14 @@ class ResultEfficiencyView extends StatelessWidget {
                             getScoreIcon(score),
                             size: 100,
                             color: ThemeApp.accentTextColor,
+                          ),
+                          const SizedBox(height: 10),
+                          Text(
+                            "Skor Anda adalah $score",
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
                           ),
                         ],
                       ),

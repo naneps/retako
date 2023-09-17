@@ -4,6 +4,7 @@ import 'package:getx_pattern_starter/app/common/buttons/x_button.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/modules/home/views/home_view.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class ResultProactiveCSC extends StatelessWidget {
   const ResultProactiveCSC({super.key});
@@ -36,16 +37,65 @@ class ResultProactiveCSC extends StatelessWidget {
                   children: [
                     RoundedContainer(
                       color: ThemeApp.accentTextColor,
-                      hasBorder: true,
+                      padding: const EdgeInsets.symmetric(horizontal: 10),
                       radius: 0,
-                      child: const Center(
-                        child: Text(
-                          "Hasil",
-                          style: TextStyle(
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
+                      child: Row(
+                        children: [
+                          const Text(
+                            "Hasil",
+                            style: TextStyle(
+                              fontSize: 24,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
+                          const Spacer(),
+                          //
+                          IconButton(
+                            icon: const Icon(MdiIcons.information),
+                            onPressed: () {
+                              Get.defaultDialog(
+                                title: "Keterangan Skor",
+                                content: Column(
+                                  children: [
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.green,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 0 - 71 = Rendah"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.yellow,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 72 - 107 = Cukup"),
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Container(
+                                          width: 20,
+                                          height: 20,
+                                          color: Colors.red,
+                                        ),
+                                        const SizedBox(width: 10),
+                                        const Text("Skor 108 -  144 = Tinggi"),
+                                      ],
+                                    ),
+                                  ],
+                                ),
+                              );
+                            },
+                          )
+                        ],
                       ),
                     ),
                     RoundedContainer(
@@ -66,7 +116,6 @@ class ResultProactiveCSC extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(height: 10),
-
                           Text(
                             getScoreCondition(score),
                             style: const TextStyle(
@@ -80,15 +129,15 @@ class ResultProactiveCSC extends StatelessWidget {
                             size: 100,
                             color: ThemeApp.accentTextColor,
                           ),
-                          // const SizedBox(height: 10),
-                          // Text(
-                          //   getScoreDescription(score),
-                          //   style: const TextStyle(
-                          //     fontSize: 14,
-                          //     fontWeight: FontWeight.bold,
-                          //   ),
-                          // ),
                           const SizedBox(height: 10),
+                          Text(
+                            "Skor Anda adalah $score",
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(
+                              fontSize: 16,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
                         ],
                       ),
                     ),
@@ -111,7 +160,7 @@ class ResultProactiveCSC extends StatelessWidget {
   }
 
   String getScoreCondition(int score) {
-    if (score >= 36 && score <= 71) {
+    if (score <= 36 && score <= 71) {
       return "Rendah";
     } else if (score >= 72 && score <= 107) {
       return "Cukup";
@@ -123,7 +172,7 @@ class ResultProactiveCSC extends StatelessWidget {
   }
 
   IconData getScoreIcon(int score) {
-    if (score >= 36 && score <= 71) {
+    if (score <= 36 && score <= 71) {
       return Icons.sentiment_dissatisfied;
     } else if (score >= 72 && score <= 107) {
       return Icons.sentiment_neutral;

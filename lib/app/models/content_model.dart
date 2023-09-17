@@ -9,5 +9,6 @@ class ContentModel {
   // from firestore
   ContentModel.fromJson(Map<String, dynamic> json) {
     url = json['url'];
+    title = json['title'];
   }
 }

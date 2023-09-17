@@ -5,7 +5,8 @@ import 'package:syncfusion_flutter_pdfviewer/pdfviewer.dart';
 class PDFScreen extends StatefulWidget {
   final String? path;
 
-  const PDFScreen({Key? key, this.path}) : super(key: key);
+  final String? title;
+  const PDFScreen({Key? key, this.path, this.title}) : super(key: key);
 
   @override
   _PDFScreenState createState() => _PDFScreenState();
@@ -16,7 +17,11 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Document"),
+        title: Text(
+          widget.title ?? "PDF",
+          style: const TextStyle(color: Colors.black),
+        ),
+        iconTheme: const IconThemeData(color: Colors.black),
         actions: <Widget>[
           IconButton(
             icon: const Icon(Icons.share),
@@ -25,10 +30,25 @@ class _PDFScreenState extends State<PDFScreen> with WidgetsBindingObserver {
         ],
       ),
       body: Scaffold(
-          body: SafeArea(
-              child: RoundedContainer(
-        child: SfPdfViewer.network(widget.path!),
-      ))),
+        body: SafeArea(
+            child: RoundedContainer(
+          child: SfPdfViewer.network(
+            widget.path!,
+            onDocumentLoadFailed: (PdfDocumentLoadFailedDetails details) {
+              // ignore: avoid_print
+              print(details.error);
+            },
+            onDocumentLoaded: (PdfDocumentLoadedDetails details) {
+              // ignore: avoid_print
+              print(details.document);
+              //
+            },
+            enableDoubleTapZooming: true,
+            enableTextSelection: true,
+            enableDocumentLinkAnnotation: true,
+          ),
+        )),
+      ),
     );
   }
 }

@@ -35,6 +35,7 @@ class VideoView extends GetView<VideoEducationController> {
           Expanded(
             child: StreamBuilder(
               stream: controller.getVideos(),
+              initialData: const [],
               builder: (context, snapshot) {
                 return ListView.builder(
                   itemCount: snapshot.data!.length,
@@ -67,7 +68,7 @@ class VideoView extends GetView<VideoEducationController> {
                         ),
                       );
                     }
-                    return null;
+                    return const SizedBox();
                   },
                 );
               },

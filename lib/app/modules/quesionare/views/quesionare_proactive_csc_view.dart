@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:getx_pattern_starter/app/common/buttons/x_Icon_button.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/common/utils.dart';
 import 'package:getx_pattern_starter/app/modules/quesionare/controllers/quesionnare_proactive_csc_controller.dart';
 import 'package:getx_pattern_starter/app/modules/quesionare/widgets/category_proactive_card.dart';
+import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
 class QuestionaryProactiveCSCView
     extends GetView<QuestionaryProactiveCSCController> {
@@ -51,6 +53,57 @@ class QuestionaryProactiveCSCView
                     color: Colors.white,
                   ),
                 ),
+                const Spacer(),
+                XIconButton(
+                  icon: MdiIcons.information,
+                  size: 25,
+                  onTap: () {
+                    // dialog keterangan skor
+                    Get.defaultDialog(
+                      title: "Keterangan Skor",
+                      content: Column(
+                        children: [
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.green,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 0 - 71 = Rendah"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.yellow,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 72 - 107 = Cukup"),
+                            ],
+                          ),
+                          Row(
+                            children: [
+                              Container(
+                                width: 20,
+                                height: 20,
+                                color: Colors.red,
+                              ),
+                              const SizedBox(width: 10),
+                              const Text("Skor 108 -  144 = Tinggi"),
+                            ],
+                          ),
+                        ],
+                      ),
+                    );
+                  },
+                ),
+                const SizedBox(
+                  width: 10,
+                )
               ],
             ),
             Expanded(
