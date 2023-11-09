@@ -3,11 +3,33 @@ import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/buttons/x_button.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
 import 'package:getx_pattern_starter/app/modules/home/views/home_view.dart';
+import 'package:getx_pattern_starter/app/services/audio_manager.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
 import 'package:material_design_icons_flutter/material_design_icons_flutter.dart';
 
-class ResultEfficiencyView extends StatelessWidget {
+class ResultEfficiencyView extends StatefulWidget {
   const ResultEfficiencyView({super.key});
+
+  @override
+  State<ResultEfficiencyView> createState() => _ResultEfficiencyViewState();
+}
+
+class _ResultEfficiencyViewState extends State<ResultEfficiencyView> {
+  final AudioManager _audioManager = AudioManager();
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _audioManager.playAudio("backsound/success.mp3");
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    _audioManager.stopAudio();
+  }
 
   @override
   Widget build(BuildContext context) {
