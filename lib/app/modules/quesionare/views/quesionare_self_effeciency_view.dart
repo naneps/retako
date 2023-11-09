@@ -51,7 +51,7 @@ class QuestionnaireSelfEfficiencyView
                 ),
                 const Spacer(),
                 XIconButton(
-                  icon: MdiIcons.help,
+                  icon: MdiIcons.information,
                   size: 25,
                   onTap: () {
                     // dialog keterangan skor

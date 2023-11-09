@@ -51,14 +51,19 @@ class _QuestionCardState extends State<QuestionCard> {
           ),
           const SizedBox(height: 10),
           RoundedContainer(
-            padding: const EdgeInsets.all(10.0),
-            margin: const EdgeInsets.all(10.0),
-            color: Colors.white30,
+            radius: 0,
+            width: MediaQuery.of(context).size.width,
+            padding: const EdgeInsets.all(10),
+            color: Colors.grey[300],
+            margin: const EdgeInsets.symmetric(
+              horizontal: 10,
+              vertical: 5,
+            ),
             child: Text(
               widget.question.questionText,
               style: const TextStyle(
                 fontSize: 14,
-                fontWeight: FontWeight.bold,
+                fontWeight: FontWeight.w500,
               ),
             ),
           ),

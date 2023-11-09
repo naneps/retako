@@ -56,7 +56,10 @@ class ModuleView extends GetView<ModuleController> {
                   // Extract the list of PDF URLs from the snapshot data
                   final pdfUrls = snapshot.data;
 
-                  return ListView.builder(
+                  return ListView.separated(
+                    separatorBuilder: (context, index) => const SizedBox(
+                      height: 5,
+                    ),
                     itemCount: pdfUrls!.length,
                     itemBuilder: (context, index) {
                       return RoundedContainer(

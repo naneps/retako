@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:getx_pattern_starter/app/common/shape/rounded_container.dart';
-import 'package:getx_pattern_starter/app/common/ui/xpicture.dart';
 import 'package:getx_pattern_starter/app/common/utils.dart';
 import 'package:getx_pattern_starter/app/models/content_model.dart';
 import 'package:getx_pattern_starter/app/themes/theme.dart';
+import 'package:photo_view/photo_view.dart';
 
 class EducationPosterView extends GetView<EducationPosterController> {
   const EducationPosterView({super.key});
@@ -45,28 +45,46 @@ class EducationPosterView extends GetView<EducationPosterController> {
                         child: Utils.loadingWidget(),
                       );
                     } else if (snapshot.hasData) {
-                      return RoundedContainer(
-                        margin: const EdgeInsets.symmetric(vertical: 10),
-                        padding: const EdgeInsets.all(10.0),
-                        gradient: LinearGradient(
-                          colors: [
-                            ThemeApp.backgroundColor,
-                            ThemeApp.backgroundColor,
-                            ThemeApp.primaryColor.withOpacity(0.5),
-                            ThemeApp.primaryColor.withOpacity(0.5),
-                            ThemeApp.backgroundColor,
-                            ThemeApp.backgroundColor,
-                          ],
-                          begin: Alignment.topLeft,
-                          end: Alignment.bottomRight,
-                        ),
-                        hasBorder: true,
-                        borderColor: ThemeApp.primaryColor,
-                        child: XPicture(
-                          imageUrl: snapshot.data![index].url,
-                          assetImage: "assets/images/logo.png",
-                          sizeHeight: Get.width,
-                          sizeWidth: Get.width,
+                      return InkWell(
+                        onLongPress: () {
+                          Get.dialog(PhotoView(
+                            backgroundDecoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            imageProvider:
+                                NetworkImage(snapshot.data![index].url!),
+                            wantKeepAlive: true,
+                            enablePanAlways: true,
+                          ));
+                        },
+                        child: RoundedContainer(
+                          margin: const EdgeInsets.symmetric(vertical: 10),
+                          padding: const EdgeInsets.all(10.0),
+                          width: Get.width,
+                          height: Get.height * 0.5,
+                          gradient: LinearGradient(
+                            colors: [
+                              ThemeApp.backgroundColor,
+                              ThemeApp.backgroundColor,
+                              ThemeApp.primaryColor.withOpacity(0.5),
+                              ThemeApp.primaryColor.withOpacity(0.5),
+                              ThemeApp.backgroundColor,
+                              ThemeApp.backgroundColor,
+                            ],
+                            begin: Alignment.topLeft,
+                            end: Alignment.bottomRight,
+                          ),
+                          hasBorder: true,
+                          borderColor: ThemeApp.primaryColor,
+                          child: PhotoView(
+                            backgroundDecoration: const BoxDecoration(
+                              color: Colors.transparent,
+                            ),
+                            imageProvider:
+                                NetworkImage(snapshot.data![index].url!),
+                            wantKeepAlive: true,
+                            enablePanAlways: true,
+                          ),
                         ),
                       );
                     }
