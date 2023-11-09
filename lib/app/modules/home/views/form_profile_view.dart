@@ -87,12 +87,14 @@ class _FormProfileViewState extends State<FormProfileView> {
   void saveForm() {
     // save to sp util
     if (gender.isEmpty || age.isEmpty) {
-      // setState(() {
-      // });
+      setState(() {});
       Utils.snackMessage(
           title: "Perhatiam",
           messages: "Umur dan Jenis Kelamin tidak boleh kosong",
           type: "warning");
+      SpUtil.putString("agee", age);
+      SpUtil.putString("gendre", gender);
+      Get.to(() => const QuestionView());
     } else {
       SpUtil.putString("age", age);
       SpUtil.putString("gender", gender);
