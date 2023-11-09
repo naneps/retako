@@ -2,17 +2,17 @@ name: getx_pattern_starter
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment: 
-  sdk: '>=2.18.2 <3.0.0'
+environment:
+  sdk: ">=2.18.2 <3.0.0"
 
-dependencies: 
+dependencies:
   cupertino_icons: ^1.0.2
   get: 4.6.4
   image_picker: 0.8.6
   sp_util: 2.0.3
   material_design_icons_flutter: 6.0.7096
   intl: ^0.18.0
-  loading_animation_widget: ^1.2.0+4
+  loading_animation_widget: ^1.2.0
   shimmer: ^3.0.0
   flutter_slidable: ^3.0.0
   dotted_border: ^2.0.0+3
@@ -34,16 +34,19 @@ dependencies:
   path_provider: ^2.1.1
   syncfusion_flutter_pdfviewer: ^23.1.36
   chewie: 1.7.1
-  flutter: 
+  photo_view: ^0.14.0
+  audioplayers: ^5.1.0
+  flutter_dotenv: 5.1.0
+  flutter:
     sdk: flutter
 
-dev_dependencies: 
+dev_dependencies:
   flutter_lints: ^2.0.0
-  flutter_test: 
+  flutter_test:
     sdk: flutter
 
-flutter: 
-  assets: 
+flutter:
+  assets:
     - assets/images/
+    - assets/backsound/
   uses-material-design: true
-
